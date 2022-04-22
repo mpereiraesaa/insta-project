@@ -17,4 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({ secret: SESSION_SECRET }));
 
+app.get("/find-hashtag", null);
+app.get("/info", null);
+app.post("/connect", null);
+
 export default app;
