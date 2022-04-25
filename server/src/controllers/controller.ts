@@ -2,7 +2,7 @@ import Express from 'express';
 import { TInstagramAuthConfig } from "../resources/instagramResource";
 import InstagramService from "../services/instagramService";
 
-const { INSTA_APP_SECRET, INSTA_APP_ID, HASHTAG, HASHTAG_FUNC_INTERVAL_SEC } = process.env;
+const { INSTA_APP_SECRET, INSTA_APP_ID, HASHTAG, HASHTAG_FUNC_INTERVAL_SEC, TOKEN_DURATION_SEC } = process.env;
 
 interface Controller {
   authorize(req: Express.Request, res: Express.Response): Promise<Express.Response<any>>;
@@ -13,6 +13,7 @@ interface Controller {
 declare module 'express-session' {
   interface SessionData {
     accessToken: string;
+    accessTokenValidUntil: Date;
   }
 }
 
@@ -25,14 +26,17 @@ const Controller: Controller = {
     };
     try {
       const accessToken = await InstagramService.authorizeAccount(config, req.body.code);
+      const now = new Date().getTime();
       req.session.accessToken = accessToken;
+      req.session.accessTokenValidUntil = new Date(now + (1000*parseInt(TOKEN_DURATION_SEC, 10)));
       return res.status(200);
     } catch (error) {
       return res.status(401);
     }
   },
   async getInfo(req: Express.Request, res: Express.Response) {
-    return res.status(200).json({ isConnected: !!req.session.accessToken });
+    const isValid = new Date() < req.session.accessTokenValidUntil;
+    return res.status(200).json({ isConnected: !!req.session.accessToken && isValid });
   },
   async findHashtag(req: Express.Request, res: Express.Response) {
     res.writeHead(200, {
