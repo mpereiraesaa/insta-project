@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
+import Controller from "./controllers/controller";
 
 // Load ENV vars
 dotenv.config();
@@ -17,8 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({ secret: SESSION_SECRET }));
 
-app.get("/find-hashtag", null);
-app.get("/info", null);
-app.post("/connect", null);
+app.get("/find-hashtag", Controller.findHashtag);
+app.get("/info", Controller.getInfo);
+app.post("/connect", Controller.authorize);
 
 export default app;
