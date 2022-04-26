@@ -14,10 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }));
 
-console.log("secret: ", SESSION_SECRET);
-
-app.get("/find-hashtag", Controller.findHashtag);
-app.get("/info", Controller.getInfo);
-app.post("/connect", Controller.authorize);
+app.get("/api/find-hashtag", Controller.findHashtag);
+app.get("/api/info", Controller.getInfo);
+app.post("/api/connect", Controller.authorize);
 
 export default app;
