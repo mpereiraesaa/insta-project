@@ -8,7 +8,7 @@ async function request<TResponse>(
     const response = await fetch(url, config);
     return await response.json() as TResponse;
   }
-  catch (error) {
+  catch (error: any) {
     let errorData = error.response;
     let errorCode = errorData.data.error.code;
     let errorType = errorData.data.error.type;

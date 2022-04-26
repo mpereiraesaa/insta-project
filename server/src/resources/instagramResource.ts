@@ -11,7 +11,13 @@ interface InstagramResourceInterface {
   getUserRecentMedia(accessToken: string): Promise<any[]>;
 }
 
-type TInstagramTokenResponse = {
+type TInstagramError = {
+  error_type?: string,
+  code?: string,
+  error_message?: string,
+}
+
+interface TInstagramTokenResponse extends TInstagramError {
   access_token: string,
   user_id: number,
 }
@@ -21,7 +27,7 @@ export type TPostData = {
   id: number,
 }
 
-type TInstagramMedia = {
+interface TInstagramMedia extends TInstagramError {
   data: TPostData[],
 }
 
@@ -37,9 +43,14 @@ const instagramResource: InstagramResourceInterface = {
       payload.append('code', authCode);
       payload.append('redirect_uri', config.redirectUri);
       const response: TInstagramTokenResponse = await api.post<URLSearchParams, TInstagramTokenResponse>(url, payload);
+      
+      if (!!response.error_type) {
+        throw new Error(response.error_message);
+      }
+
       accessToken = response.access_token;
-    } catch (e) {
-        throw new Error(`instagramResource.getAccessToken: ${e.message}`);
+    } catch (e: any) {
+      throw new Error(`instagramResource.getAccessToken: ${e.message}`);
     }
     return accessToken;
   },
@@ -49,9 +60,14 @@ const instagramResource: InstagramResourceInterface = {
       const fields = 'caption';
       const url = `https://graph.instagram.com/me/media?fields=${fields}&access_token=${accessToken}`;
       const response: TInstagramMedia = await api.get<TInstagramMedia>(url);
+
+      if (!!response.error_type) {
+        throw new Error(response.error_message);
+      }
+
       results = response.data;
-    } catch (e) {
-        console.log("instagramResource.getUserRecentMedia: ", e.message);
+    } catch (e: any) {
+      throw new Error(`instagramResource.getUserRecentMedia: ${e.message}`);
     }
     return results;
   }
