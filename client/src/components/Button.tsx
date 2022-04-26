@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 interface Props {
   caption: string;
@@ -6,9 +7,24 @@ interface Props {
 }
 
 export default function Button(props: Props) {
+  const [isClicked, setIsClicked] = useState(false);
   const { caption, link } = props;
+  const variants = {
+    clicked: { backgroundColor: 'rgba(0,149,246,.5)' },
+    notClicked: {},
+  };
   return (
-    <a style={styles.button} href={link}>{caption}</a>
+    <motion.a
+      onMouseDown={() => setIsClicked(true)}
+      onMouseUp={() => setIsClicked(false)}
+      animate={isClicked ? 'clicked' : 'notClicked'}
+      style={styles.button}
+      href={link}
+      variants={variants}
+      initial={false}
+    >
+      {caption}
+    </motion.a>
   );
 }
 
