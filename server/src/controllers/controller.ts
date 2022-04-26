@@ -29,7 +29,7 @@ const Controller: Controller = {
       const now = new Date().getTime();
       req.session.accessToken = accessToken;
       req.session.accessTokenValidUntil = new Date(now + (1000* TOKEN_DURATION_SEC));
-      return res.status(200);
+      return res.status(200).json({ success: true });
     } catch (error: any) {
       return res.status(401).json({ message: error.message });
     }

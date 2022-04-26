@@ -15,7 +15,7 @@ const InstagramService: InstagramServiceInterface = {
     return posts.some((post: TPostData) => post.caption.indexOf(hashtag.toLowerCase()));    
   },
   accessTokenValidity(validUntil: Date) {
-    return new Date() < validUntil;
+    return new Date() < new Date(validUntil);
   },
 }
 
