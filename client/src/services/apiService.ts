@@ -1,6 +1,6 @@
 import CONFIG from "../helpers/config";
 
-const { BASE_URL } = CONFIG;
+const { BASE_URL, DEFAULT_HEADERS } = CONFIG;
 
 async function request<TResponse>(
   url: string,
@@ -19,7 +19,7 @@ const api = {
   post: <TBody extends BodyInit, TResponse>(
     url: string,
     data: TBody
-  ) => request<TResponse>(url, { method: 'POST', body: data }),
+  ) => request<TResponse>(url, { method: 'POST', body: JSON.stringify(data), headers: DEFAULT_HEADERS }),
   get: <TResponse>(url: string) => request<TResponse>(url),
 };
 

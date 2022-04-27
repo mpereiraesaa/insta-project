@@ -39,6 +39,7 @@ function IntroError() {
 }
 
 export default function IntroPage() {
+  const [data, updateData] = useState(null);
   const [hasError, setError] = useState(false);
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [queryParams] = useSearchParams();
@@ -58,9 +59,13 @@ export default function IntroPage() {
     }
     authFunction();
   }, [code]);
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log("auth: ok");
+  React.useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const source = new EventSource(CONFIG.BASE_URL + 'find-hashtag', { withCredentials: true });
+
+    source.onmessage = function logEvents(event) {      
+      updateData(JSON.parse(event.data));     
     }
   }, [isAuthenticated]);
   return (
