@@ -10,7 +10,7 @@ const app = express();
 
 // Express configuration
 app.set("port", process.env.PORT || 8000);
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

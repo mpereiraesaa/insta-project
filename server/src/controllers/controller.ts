@@ -42,7 +42,7 @@ const Controller: Controller = {
       isConnected = InstagramService.accessTokenValidity(accessTokenValidUntil)
     }
 
-    return res.status(200).json({ isConnected });
+    return res.status(200).json({ connected: isConnected });
   },
   async findHashtag(req: Express.Request, res: Express.Response) {
     const { accessToken } = req.session;

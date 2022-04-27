@@ -64,7 +64,8 @@ export default function IntroPage() {
 
     const source = new EventSource(CONFIG.BASE_URL + 'find-hashtag', { withCredentials: true });
 
-    source.onmessage = function logEvents(event) {      
+    source.onmessage = function logEvents(event) {
+      console.log(event);
       updateData(JSON.parse(event.data));     
     }
   }, [isAuthenticated]);

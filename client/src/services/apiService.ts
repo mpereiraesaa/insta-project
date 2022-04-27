@@ -4,7 +4,7 @@ const { BASE_URL, DEFAULT_HEADERS } = CONFIG;
 
 async function request<TResponse>(
   url: string,
-  config?: any
+  config?: RequestInit
 ): Promise<TResponse | undefined> {
   try {
     const response = await fetch(url, config);
@@ -20,7 +20,7 @@ const api = {
     url: string,
     data: TBody
   ) => request<TResponse>(url, { method: 'POST', body: JSON.stringify(data), headers: DEFAULT_HEADERS }),
-  get: <TResponse>(url: string) => request<TResponse>(url),
+  get: <TResponse>(url: string) => request<TResponse>(url, { credentials: "include" }),
 };
 
 interface IAPIService {
