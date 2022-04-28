@@ -23,8 +23,8 @@ const options = {
  * Start Express server.
  */
 const server = https.createServer(options, app).listen(app.get("port"), () => {
-  console.log("App is running at https://localhost:%d", app.get("port"));
-  console.log("Press CTRL-C to stop\n");
+  console.log("Backend is running at https://localhost:%d", app.get("port"));
+  console.log("Frontend is loading...")
 });
 
 export default server;
