@@ -26,7 +26,7 @@ We are running everything with SSL using some self-signed certificates, your web
 
 ## Default hashtag
 
-We save the hashtag in environment files in both subprojects, .env file for the server and a .env.development for the frontend project, right now default hashtag is #satori but this can be modified easily by just modifying it's value in the two environment files. 
+We save the hashtag in environment files in both subprojects, .env file for the server and a .env.development for the frontend project, right now default hashtag is **#satori** but this can be modified easily by just modifying it's value in the two environment files. 
 
 ## Test IG account
 
