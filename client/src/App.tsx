@@ -27,9 +27,9 @@ function App() {
     <AnimatePresence exitBeforeEnter>
       {!isLoading ? (
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} ></Route>
-          <Route path="/intro" element={<Intro />} ></Route>
-          <Route path="/success" element={<Success />} ></Route>
+          <Route path="/" element={<Home isConnected={isConnected} />} ></Route>
+          <Route path="/intro" element={<Intro isConnected={isConnected} />} ></Route>
+          <Route path="/success" element={<Success isConnected={isConnected} />} ></Route>
         </Routes>
       ) : (
         <LoaderPage />

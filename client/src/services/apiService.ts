@@ -1,6 +1,7 @@
 import CONFIG from "../helpers/config";
 
-const { BASE_URL, DEFAULT_HEADERS } = CONFIG;
+const { DEFAULT_HEADERS } = CONFIG;
+const { REACT_APP_BASE_URL } = process.env;
 
 async function request<TResponse>(
   url: string,
@@ -19,7 +20,7 @@ const api = {
   post: <TBody extends BodyInit, TResponse>(
     url: string,
     data: TBody
-  ) => request<TResponse>(url, { method: 'POST', body: JSON.stringify(data), headers: DEFAULT_HEADERS }),
+  ) => request<TResponse>(url, { method: 'POST', body: JSON.stringify(data), headers: DEFAULT_HEADERS, credentials: "include" }),
   get: <TResponse>(url: string) => request<TResponse>(url, { credentials: "include" }),
 };
 
@@ -30,10 +31,10 @@ interface IAPIService {
 
 const apiService: IAPIService = {
   auth<TResponse>(redirectUri: string, code: string) {
-    return api.post<any, TResponse>(BASE_URL + 'connect', { redirectUri, code });
+    return api.post<any, TResponse>(REACT_APP_BASE_URL + 'connect', { redirectUri, code });
   },
   info<TData>() {
-    return api.get<TData>(BASE_URL + 'info');
+    return api.get<TData>(REACT_APP_BASE_URL + 'info');
   },
 };
 

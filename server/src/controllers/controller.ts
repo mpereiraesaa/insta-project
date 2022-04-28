@@ -61,7 +61,7 @@ const Controller: Controller = {
 
     const loopFunc = async () => {
       try {
-        const hashtagFound = await InstagramService.isHashtagPostedByUser(HASHTAG, accessToken);
+        const hashtagFound = await InstagramService.isHashtagPostedByUser('#' + HASHTAG, accessToken);
 
         res.write('data: ' + JSON.stringify({ success: hashtagFound }) + '\n\n');
 
@@ -70,7 +70,7 @@ const Controller: Controller = {
           res.end();
         }
       } catch (error: any) {
-        res.write('data: ' + JSON.stringify({ error: error.message }));
+        res.write('data: ' + JSON.stringify({ success: false, error: error.message }));
       }
     };
 

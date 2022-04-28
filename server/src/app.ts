@@ -10,11 +10,24 @@ const app = express();
 
 // Express configuration
 app.set("port", process.env.PORT || 8000);
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors({
+  credentials: true,
+  origin: ['https://localhost:3000', 'http://localhost:3000'],
+  methods: ["GET,PUT,POST,DELETE,PATCH,OPTIONS"],
+  allowedHeaders: `Content-Type, Authorization, X-Requested-With`,
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }));
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    sameSite: 'none'
+  }
+}));
 
 app.get("/api/find-hashtag", Controller.findHashtag);
 app.get("/api/info", Controller.getInfo);

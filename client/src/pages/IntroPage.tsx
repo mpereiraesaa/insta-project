@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from '../styles/styles';
 import Button from "../components/Button";
 import BaseContainer from "../components/BaseContainer";
 import apiService from "../services/apiService";
-import CONFIG from "../helpers/config";
+import { BaseProps } from "../helpers/common";
+
+const { REACT_APP_REDIRECT_URI, REACT_APP_BASE_URL, REACT_APP_HASHTAG } = process.env;
 
 interface IntroDetailsProps {
   link: string;
@@ -19,7 +21,7 @@ function IntroDetails({ link }: IntroDetailsProps) {
   return (
     <React.Fragment>
       <p>You have to post using your Instagram account with the following hashtag:</p>
-      <p><small><code>#hashtag</code></small></p>
+      <p><small><code>#{REACT_APP_HASHTAG}</code></small></p>
       <Button caption="Launch Instagram" link={link} />
       <cite style={styles.smallCite}>
         We are actively monitoring your account, once your post becomes available the process will finish.
@@ -38,16 +40,17 @@ function IntroError() {
   )
 }
 
-export default function IntroPage() {
-  const [data, updateData] = useState(null);
+export default function IntroPage(props: BaseProps) {
+  const { isConnected } = props;
   const [hasError, setError] = useState(false);
   const [isAuthenticated, setAuthenticated] = useState(false);
+  const navigation = useNavigate();
   const [queryParams] = useSearchParams();
   const code: string = queryParams.get('code') || '';
   useEffect(() => {
     const authFunction = async () => {
       try {
-        const data = await apiService.auth<IAuthResponse>(CONFIG.REDIRECT_URI, code);
+        const data = await apiService.auth<IAuthResponse>(REACT_APP_REDIRECT_URI, code);
         if (!data?.success) {
           setError(true);
         } else {
@@ -57,18 +60,23 @@ export default function IntroPage() {
         setError(true);
       }
     }
-    authFunction();
-  }, [code]);
-  React.useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!!code && !isConnected) {
+      authFunction();
+    }
+  }, [code, isConnected]);
+  useEffect(() => {
+    if (!isAuthenticated && !isConnected) return;
 
-    const source = new EventSource(CONFIG.BASE_URL + 'find-hashtag', { withCredentials: true });
+    const source = new EventSource(REACT_APP_BASE_URL + 'find-hashtag', { withCredentials: true });
 
     source.onmessage = function logEvents(event) {
-      console.log(event);
-      updateData(JSON.parse(event.data));     
+      const data: any = JSON.parse(event.data);
+      if (data.success) {
+        source.close();
+        navigation("/success");
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isConnected, navigation]);
   return (
     <BaseContainer>
       <header style={styles.container}>
