@@ -9,6 +9,7 @@ export type TInstagramAuthConfig = {
 interface InstagramResourceInterface {
   getAccessToken(config: TInstagramAuthConfig, authCode: string): Promise<string>; 
   getUserRecentMedia(accessToken: string): Promise<any[]>;
+  getUserInfo(accessToken: string): Promise<any>;
 }
 
 type TInstagramError = {
@@ -68,6 +69,23 @@ const instagramResource: InstagramResourceInterface = {
       results = response.data;
     } catch (e: any) {
       throw new Error(`instagramResource.getUserRecentMedia: ${e.message}`);
+    }
+    return results;
+  },
+  async getUserInfo(accessToken: string) {
+    let results: any = {};
+    try {
+      const fields = 'id,username';
+      const url = `https://graph.instagram.com/me?fields=${fields}&access_token=${accessToken}`;
+      const response: any = await api.get<any>(url);
+
+      if (!!response.error_type) {
+        throw new Error(response.error_message);
+      }
+
+      results = response;
+    } catch (e: any) {
+      throw new Error(`instagramResource.getUserInfo: ${e.message}`);
     }
     return results;
   }

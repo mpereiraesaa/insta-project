@@ -5,9 +5,11 @@
   "scripts": {
     "start-dev-server": "npm run start --prefix server",
     "start-dev-client": "npm run start --prefix client",
-    "start": "npm run start-dev-server & npm run start-dev-client"
+    "start": "npm run start-dev-server & npm run start-dev-client",
+    "postinstall": "(cd server && npm install) && (cd client && npm install)"
   },
   "keywords": [],
   "author": "mpereiraesaa",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }

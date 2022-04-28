@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 interface Props {
   caption: string;
   link: string;
+  target?: string;
 }
 
 export default function Button(props: Props) {
   const [isClicked, setIsClicked] = useState(false);
-  const { caption, link } = props;
+  const { caption, link, target } = props;
   const variants = {
     clicked: { backgroundColor: 'rgba(0,149,246,.5)' },
     notClicked: {},
@@ -20,6 +21,7 @@ export default function Button(props: Props) {
       animate={isClicked ? 'clicked' : 'notClicked'}
       style={styles.button}
       href={link}
+      target={target}
       variants={variants}
       initial={false}
     >

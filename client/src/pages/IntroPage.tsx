@@ -10,23 +10,27 @@ const { REACT_APP_REDIRECT_URI, REACT_APP_BASE_URL, REACT_APP_HASHTAG } = proces
 
 interface Props extends BaseProps {
   setConnection: Dispatch<SetStateAction<boolean>>;
+  setUsername: Dispatch<SetStateAction<string>>;
+  username: string;
 }
 
 interface IntroDetailsProps {
   link: string;
+  target: string;
 }
 
 interface IAuthResponse {
   success: boolean;
   message?: string;
+  username: string;
 }
 
-function IntroDetails({ link }: IntroDetailsProps) {
+function IntroDetails({ link, target }: IntroDetailsProps) {
   return (
     <React.Fragment>
       <p>You have to post using your Instagram account with the following hashtag:</p>
       <p><small><code>#{REACT_APP_HASHTAG}</code></small></p>
-      <Button caption="Launch Instagram" link={link} />
+      <Button caption="Launch Instagram" link={link} target={target} />
       <cite style={styles.smallCite}>
         We are actively monitoring your account, once your post becomes available the process will finish.
       </cite>
@@ -45,7 +49,7 @@ function IntroError() {
 }
 
 export default function IntroPage(props: Props) {
-  const { isConnected, setConnection } = props;
+  const { isConnected, setConnection, setUsername, username } = props;
   const [isListening, setListening] = useState(false);
   const [hasError, setError] = useState(false);
   const [isAuthenticated, setAuthenticated] = useState(false);
@@ -61,6 +65,7 @@ export default function IntroPage(props: Props) {
         } else {
           setAuthenticated(true);
           setConnection(true);
+          setUsername(data.username);
         }
       } catch (error: any) {
         setError(true);
@@ -69,7 +74,7 @@ export default function IntroPage(props: Props) {
     if (!!code && !isConnected) {
       authFunction();
     }
-  }, [code, isConnected]);
+  }, [code, isConnected, setConnection, setUsername]);
   useEffect(() => {
     if ((!isAuthenticated && !isConnected) || isListening) return;
 
@@ -84,11 +89,11 @@ export default function IntroPage(props: Props) {
     }
 
     setListening(true);
-  }, [isAuthenticated, isConnected, navigation]);
+  }, [isAuthenticated, isConnected, isListening, navigation]);
   return (
     <BaseContainer>
       <header style={styles.container}>
-        {!hasError ? <IntroDetails link="a" /> : <IntroError />}
+        {!hasError ? <IntroDetails target="_blank" link={`http://instagram.com/_u/${username}/`} /> : <IntroError />}
       </header>
     </BaseContainer>
   );

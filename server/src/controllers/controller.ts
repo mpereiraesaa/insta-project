@@ -27,9 +27,15 @@ const Controller: Controller = {
     try {
       const accessToken = await InstagramService.authorizeAccount(config, req.body.code);
       const now = new Date().getTime();
+
+      // Store session
       req.session.accessToken = accessToken;
       req.session.accessTokenValidUntil = new Date(now + (1000* TOKEN_DURATION_SEC));
-      return res.status(200).json({ success: true });
+
+      // Retrieve username
+      const username: string = await InstagramService.getUserName(accessToken);
+
+      return res.status(200).json({ success: true, username });
     } catch (error: any) {
       return res.status(401).json({ success: false, message: error.message });
     }
@@ -37,12 +43,17 @@ const Controller: Controller = {
   async getInfo(req: Express.Request, res: Express.Response) {
     const { accessToken, accessTokenValidUntil } = req.session;
     let isConnected = false;
+    let username = '';
 
     if (!!accessToken && !!accessTokenValidUntil) {
       isConnected = InstagramService.accessTokenValidity(accessTokenValidUntil)
     }
 
-    return res.status(200).json({ connected: isConnected });
+    if (isConnected) {
+       username = await InstagramService.getUserName(accessToken as string);
+    }
+
+    return res.status(200).json({ connected: isConnected, username });
   },
   async findHashtag(req: Express.Request, res: Express.Response) {
     const { accessToken } = req.session;

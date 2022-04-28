@@ -9,9 +9,11 @@ import apiService from './services/apiService';
 
 interface TInfo {
   connected: boolean;
+  username: string;
 }
 
 function App() {
+  const [username, setUsername] = useState("");
   const [isLoading, setLoading] = useState(true);
   const [isConnected, setConnected] = useState(false);
   const location = useLocation();
@@ -20,6 +22,7 @@ function App() {
       const data = await apiService.info<TInfo>();
       setLoading(false);
       setConnected(!!data?.connected);
+      setUsername(data?.username as string);
     };
     fetchInfo();
   }, []);
@@ -28,7 +31,14 @@ function App() {
       {!isLoading ? (
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home isConnected={isConnected} />} ></Route>
-          <Route path="/intro" element={<Intro isConnected={isConnected} setConnection={setConnected} />} ></Route>
+          <Route path="/intro" element={
+            <Intro
+              username={username}
+              isConnected={isConnected}
+              setUsername={setUsername}
+              setConnection={setConnected}
+            />}>
+          </Route>
           <Route path="/success" element={<Success isConnected={isConnected} />} ></Route>
         </Routes>
       ) : (
