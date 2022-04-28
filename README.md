@@ -24,6 +24,10 @@ This will trigger first the backend (build and then run) and then the frontend c
 
 We are running everything with SSL using some self-signed certificates, your web browser will obviously give you a warning about it, just ignore it and continue, the reason for this is that we need to use HTTPS domains when working with Instagram Basic Display API redirection handler.
 
+## Default hashtag
+
+We save the hashtag in environment files in both subprojects, .env file for the server and a .env.development for the frontend project, right now default hashtag is #satori but this can be modified easily by just modifying it's value in the two environment files. 
+
 ## Test IG account
 
 You can use the following account **test_nfts** with password **satori.art**
