@@ -20,6 +20,8 @@ npm install
 npm start
 ```
 
+We are running everything with SSL using some self-signed certificates, your web browser will obviously give you a warning about it, just ignore it and continue, the reason for this is that we need to use HTTPS domains when working with Instagram Basic Display API redirection handler.
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
