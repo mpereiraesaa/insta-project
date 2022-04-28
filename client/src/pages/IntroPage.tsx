@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from '../styles/styles';
 import Button from "../components/Button";
@@ -7,6 +7,10 @@ import apiService from "../services/apiService";
 import { BaseProps } from "../helpers/common";
 
 const { REACT_APP_REDIRECT_URI, REACT_APP_BASE_URL, REACT_APP_HASHTAG } = process.env;
+
+interface Props extends BaseProps {
+  setConnection: Dispatch<SetStateAction<boolean>>;
+}
 
 interface IntroDetailsProps {
   link: string;
@@ -40,8 +44,8 @@ function IntroError() {
   )
 }
 
-export default function IntroPage(props: BaseProps) {
-  const { isConnected } = props;
+export default function IntroPage(props: Props) {
+  const { isConnected, setConnection } = props;
   const [hasError, setError] = useState(false);
   const [isAuthenticated, setAuthenticated] = useState(false);
   const navigation = useNavigate();
@@ -55,6 +59,7 @@ export default function IntroPage(props: BaseProps) {
           setError(true);
         } else {
           setAuthenticated(true);
+          setConnection(true);
         }
       } catch (error: any) {
         setError(true);

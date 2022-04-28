@@ -28,7 +28,7 @@ function App() {
       {!isLoading ? (
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home isConnected={isConnected} />} ></Route>
-          <Route path="/intro" element={<Intro isConnected={isConnected} />} ></Route>
+          <Route path="/intro" element={<Intro isConnected={isConnected} setConnection={setConnected} />} ></Route>
           <Route path="/success" element={<Success isConnected={isConnected} />} ></Route>
         </Routes>
       ) : (

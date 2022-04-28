@@ -12,7 +12,7 @@ const InstagramService: InstagramServiceInterface = {
   },
   async isHashtagPostedByUser(hashtag: string, accessToken: string) {
     const posts: TPostData[] = await instagramResource.getUserRecentMedia(accessToken);
-    return posts.some((post: TPostData) => post.caption.indexOf(hashtag.toLowerCase()));    
+    return posts.some((post: TPostData) => post.caption.toLowerCase().indexOf(hashtag.toLowerCase()) >= 0);
   },
   accessTokenValidity(validUntil: Date) {
     return new Date() < new Date(validUntil);
