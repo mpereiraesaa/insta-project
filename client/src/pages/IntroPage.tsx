@@ -46,6 +46,7 @@ function IntroError() {
 
 export default function IntroPage(props: Props) {
   const { isConnected, setConnection } = props;
+  const [isListening, setListening] = useState(false);
   const [hasError, setError] = useState(false);
   const [isAuthenticated, setAuthenticated] = useState(false);
   const navigation = useNavigate();
@@ -70,7 +71,7 @@ export default function IntroPage(props: Props) {
     }
   }, [code, isConnected]);
   useEffect(() => {
-    if (!isAuthenticated && !isConnected) return;
+    if ((!isAuthenticated && !isConnected) || isListening) return;
 
     const source = new EventSource(REACT_APP_BASE_URL + 'find-hashtag', { withCredentials: true });
 
@@ -81,6 +82,8 @@ export default function IntroPage(props: Props) {
         navigation("/success");
       }
     }
+
+    setListening(true);
   }, [isAuthenticated, isConnected, navigation]);
   return (
     <BaseContainer>
