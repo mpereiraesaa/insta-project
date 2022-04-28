@@ -20,6 +20,8 @@ npm install
 npm start
 ```
 
+This will trigger first the backend (build and then run) and it will run just after the frontend client which is running in dev mode by default.
+
 We are running everything with SSL using some self-signed certificates, your web browser will obviously give you a warning about it, just ignore it and continue, the reason for this is that we need to use HTTPS domains when working with Instagram Basic Display API redirection handler.
 
 ## Test IG account
