@@ -4,7 +4,7 @@ This is a project that implements a client frontend that is using React and Type
 
 The project consists of a react application that allows the user to connect using his Instagram account, then we ask the user to post using a particular #hashtag and we run a monitor process that will retrieve the user posts using an interval until he posts the right #hashtag and then the process will finish.
 
-We Server sent events an unidirectional channel that sends data from the backend to the client.
+We use Server sent events which is a server push technology using a unidirectional channel that sends data from the backend to the client.
 
 ## Installation
 
